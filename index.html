@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuickFill — 一鍵擷取表單、自動填寫 | Fillcast Labs</title>
-  <meta name="description" content="QuickFill 由 Fillcast Labs 出品，一鍵擷取網頁表單內容並自動建立填寫規則，下次造訪相同頁面時自動填入，省去重複填寫的麻煩。">
-  <meta property="og:title" content="QuickFill — 一鍵擷取表單、自動填寫 | Fillcast Labs">
-  <meta property="og:description" content="Fillcast Labs 出品。預約掛號、訂位不再重複輸入。一鍵擷取，自動填寫。">
+  <title>QuickFill — Fillcast Labs</title>
+  <meta name="description" content="QuickFill by Fillcast Labs — One-click form capture and auto-fill Chrome extension.">
+  <meta property="og:title" content="QuickFill — Fillcast Labs">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
       --brand: #6C5CE7;
@@ -42,6 +41,12 @@
       color: var(--text);
       line-height: 1.7;
       background: var(--bg);
+    }
+    html[lang="ja"] body {
+      font-family: 'Noto Sans JP', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    html[lang="en"] body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     /* ===== Nav ===== */
@@ -105,12 +110,12 @@
       font-size: 17px;
       font-weight: 800;
     }
-    .nav-sep {
-      width: 1px;
-      height: 24px;
-      background: var(--border);
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
     }
-    .nav-links { display: flex; gap: 28px; align-items: center; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
     .nav-links a {
       text-decoration: none;
       color: var(--text-secondary);
@@ -119,6 +124,61 @@
       transition: color 0.15s;
     }
     .nav-links a:hover { color: var(--brand); }
+
+    /* Language Switcher */
+    .lang-switcher {
+      position: relative;
+    }
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.15s;
+      font-family: inherit;
+    }
+    .lang-btn:hover { border-color: var(--brand); }
+    .lang-btn svg { width: 14px; height: 14px; color: var(--text-secondary); }
+    .lang-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      min-width: 140px;
+      z-index: 200;
+    }
+    .lang-dropdown.open { display: block; }
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.1s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+    }
+    .lang-option:hover { background: var(--bg-alt); }
+    .lang-option.active { color: var(--brand); font-weight: 700; }
 
     /* ===== Hero ===== */
     .hero {
@@ -173,7 +233,7 @@
     .hero p {
       font-size: 18px;
       color: var(--text-secondary);
-      max-width: 560px;
+      max-width: 580px;
       margin: 0 auto 40px;
     }
     .hero-actions {
@@ -416,8 +476,9 @@
     }
     .privacy-content h3:first-child { margin-top: 0; }
     .privacy-content ul { padding-left: 20px; margin-bottom: 12px; }
+    .privacy-content a { color: var(--brand); }
 
-    /* ===== Company Section ===== */
+    /* ===== Company ===== */
     #about-company { background: var(--bg); }
     .company-card {
       max-width: 740px;
@@ -452,6 +513,7 @@
       color: var(--text-secondary);
       font-size: 15px;
       margin-bottom: 20px;
+      font-style: italic;
     }
     .company-card p {
       font-size: 14px;
@@ -524,9 +586,7 @@
 
     /* ===== Responsive ===== */
     @media (max-width: 768px) {
-      .nav-left { gap: 12px; }
-      .nav-links { gap: 16px; }
-      .nav-links a { font-size: 13px; }
+      .nav-links { display: none; }
       section { padding: 64px 16px; }
       .features-grid { grid-template-columns: 1fr; }
       .steps { grid-template-columns: 1fr; gap: 24px; }
@@ -552,12 +612,26 @@
           </div>
         </a>
       </div>
-      <div class="nav-links">
-        <a href="#features">功能</a>
-        <a href="#how-it-works">使用方式</a>
-        <a href="#security">安全性</a>
-        <a href="#privacy">隱私政策</a>
-        <a href="#about-company">關於我們</a>
+      <div class="nav-right">
+        <div class="nav-links">
+          <a href="#features" data-i18n="nav.features"></a>
+          <a href="#how-it-works" data-i18n="nav.howItWorks"></a>
+          <a href="#security" data-i18n="nav.security"></a>
+          <a href="#privacy" data-i18n="nav.privacy"></a>
+          <a href="#about-company" data-i18n="nav.about"></a>
+        </div>
+        <div class="lang-switcher">
+          <button class="lang-btn" id="lang-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span id="lang-label">繁體中文</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="lang-dropdown" id="lang-dropdown">
+            <button class="lang-option active" data-lang="zh">繁體中文</button>
+            <button class="lang-option" data-lang="en">English</button>
+            <button class="lang-option" data-lang="ja">日本語</button>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
@@ -566,23 +640,20 @@
   <section class="hero">
     <div class="hero-badge">
       <span class="dot"></span>
-      Fillcast Labs 出品
+      <span data-i18n="hero.badge"></span>
     </div>
-    <h1>預約掛號、訂位<br><span class="highlight">不再重複填寫</span></h1>
-    <p>QuickFill 讓你一鍵擷取網頁表單內容，下次造訪相同頁面時自動填入，省去每次重複輸入相同資料的麻煩。</p>
+    <h1 data-i18n-html="hero.title"></h1>
+    <p data-i18n="hero.subtitle"></p>
     <div class="hero-actions">
       <a href="#install" class="hero-cta">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        安裝 Chrome 擴充功能
+        <span data-i18n="hero.cta"></span>
       </a>
-      <a href="#how-it-works" class="hero-cta-secondary">
-        了解運作方式
-      </a>
+      <a href="#how-it-works" class="hero-cta-secondary" data-i18n="hero.ctaSecondary"></a>
     </div>
-
     <div class="demo-placeholder">
       <div class="icon">&#128247;</div>
-      <p>擴充功能操作截圖展示區<br><small>安裝後在此放入實際操作截圖</small></p>
+      <p data-i18n-html="hero.screenshot"></p>
     </div>
   </section>
 
@@ -590,38 +661,38 @@
   <section id="features">
     <div class="section-inner">
       <div class="section-eyebrow">Features</div>
-      <h2 class="section-title">核心功能</h2>
-      <p class="section-subtitle">簡單三步驟，從此告別重複填寫</p>
+      <h2 class="section-title" data-i18n="features.title"></h2>
+      <p class="section-subtitle" data-i18n="features.subtitle"></p>
       <div class="features-grid">
         <div class="feature-card">
           <div class="feature-icon purple">&#128203;</div>
-          <h3>一鍵擷取表單</h3>
-          <p>填好表單後，點擊 QuickFill 按鈕即可擷取所有欄位值。系統自動辨識每個欄位的定位器，確保精準對應。支援 input、select、textarea、radio、checkbox 等各種表單元素。</p>
+          <h3 data-i18n="features.capture.title"></h3>
+          <p data-i18n="features.capture.desc"></p>
         </div>
         <div class="feature-card">
           <div class="feature-icon green">&#9889;</div>
-          <h3>自動填寫</h3>
-          <p>下次造訪相同頁面時，QuickFill 自動偵測匹配的規則並填入表單。支援 React、Vue 等前端框架的受控元件，確保填寫後表單狀態正確更新。</p>
+          <h3 data-i18n="features.autofill.title"></h3>
+          <p data-i18n="features.autofill.desc"></p>
         </div>
         <div class="feature-card">
           <div class="feature-icon yellow">&#128194;</div>
-          <h3>規則管理</h3>
-          <p>在管理頁面查看所有規則，按網站分組顯示。支援編輯欄位值、重新命名規則、刪除單條或批次刪除。為不同家庭成員各存一組資料也沒問題。</p>
+          <h3 data-i18n="features.manage.title"></h3>
+          <p data-i18n="features.manage.desc"></p>
         </div>
         <div class="feature-card">
           <div class="feature-icon blue">&#127760;</div>
-          <h3>智慧 URL 比對</h3>
-          <p>規則依據網站的 Domain + Path 綁定，忽略 Query 參數變化。掛號頁面不管日期怎麼變，規則都能正確匹配到相同的表單。</p>
+          <h3 data-i18n="features.url.title"></h3>
+          <p data-i18n="features.url.desc"></p>
         </div>
         <div class="feature-card">
           <div class="feature-icon purple">&#128260;</div>
-          <h3>跨裝置同步</h3>
-          <p>將重要規則標記後，可選擇性同步至 Chrome 帳號。在家裡電腦建立的規則，到公司的電腦也能使用。完全透過 Chrome 原生同步機制，無需額外帳號。</p>
+          <h3 data-i18n="features.sync.title"></h3>
+          <p data-i18n="features.sync.desc"></p>
         </div>
         <div class="feature-card">
           <div class="feature-icon red">&#128274;</div>
-          <h3>安全至上</h3>
-          <p>絕不擷取密碼欄位與信用卡資訊。所有資料僅儲存在瀏覽器本地，不傳送至任何外部伺服器。你的個人資料，只有你自己能看到。</p>
+          <h3 data-i18n="features.security.title"></h3>
+          <p data-i18n="features.security.desc"></p>
         </div>
       </div>
     </div>
@@ -631,23 +702,23 @@
   <section id="how-it-works">
     <div class="section-inner">
       <div class="section-eyebrow">How It Works</div>
-      <h2 class="section-title">三步驟開始使用</h2>
-      <p class="section-subtitle">不需要複雜的設定，填好表單就能開始</p>
+      <h2 class="section-title" data-i18n="steps.title"></h2>
+      <p class="section-subtitle" data-i18n="steps.subtitle"></p>
       <div class="steps">
         <div class="step">
           <div class="step-number">1</div>
-          <h3>手動填寫表單</h3>
-          <p>在目標網頁（如醫院掛號、餐廳訂位）正常填寫你的個人資料。</p>
+          <h3 data-i18n="steps.s1.title"></h3>
+          <p data-i18n="steps.s1.desc"></p>
         </div>
         <div class="step">
           <div class="step-number">2</div>
-          <h3>點擊擷取</h3>
-          <p>點擊工具列的 QuickFill 圖示，按下「擷取目前表單」，確認內容後儲存。</p>
+          <h3 data-i18n="steps.s2.title"></h3>
+          <p data-i18n="steps.s2.desc"></p>
         </div>
         <div class="step">
           <div class="step-number">3</div>
-          <h3>自動填寫</h3>
-          <p>下次造訪相同頁面，表單自動填好！也可以手動選擇要套用的規則。</p>
+          <h3 data-i18n="steps.s3.title"></h3>
+          <p data-i18n="steps.s3.desc"></p>
         </div>
       </div>
     </div>
@@ -657,28 +728,28 @@
   <section id="use-cases">
     <div class="section-inner">
       <div class="section-eyebrow">Use Cases</div>
-      <h2 class="section-title">適用場景</h2>
-      <p class="section-subtitle">任何需要重複填寫相同資料的網頁表單</p>
+      <h2 class="section-title" data-i18n="useCases.title"></h2>
+      <p class="section-subtitle" data-i18n="useCases.subtitle"></p>
       <div class="use-cases-grid">
         <div class="use-case">
           <div class="icon">&#127973;</div>
-          <h3>醫院掛號</h3>
-          <p>身分證、姓名、電話不用再重填</p>
+          <h3 data-i18n="useCases.hospital.title"></h3>
+          <p data-i18n="useCases.hospital.desc"></p>
         </div>
         <div class="use-case">
           <div class="icon">&#127860;</div>
-          <h3>餐廳訂位</h3>
-          <p>每次訂位都輸入一樣的聯絡資料</p>
+          <h3 data-i18n="useCases.restaurant.title"></h3>
+          <p data-i18n="useCases.restaurant.desc"></p>
         </div>
         <div class="use-case">
           <div class="icon">&#127915;</div>
-          <h3>活動報名</h3>
-          <p>線上活動報名，快速填完送出</p>
+          <h3 data-i18n="useCases.event.title"></h3>
+          <p data-i18n="useCases.event.desc"></p>
         </div>
         <div class="use-case">
           <div class="icon">&#128666;</div>
-          <h3>預約服務</h3>
-          <p>各類線上預約表單一鍵填寫</p>
+          <h3 data-i18n="useCases.booking.title"></h3>
+          <p data-i18n="useCases.booking.desc"></p>
         </div>
       </div>
     </div>
@@ -688,44 +759,14 @@
   <section id="security">
     <div class="section-inner">
       <div class="section-eyebrow">Security</div>
-      <h2 class="section-title">你的資料安全是第一優先</h2>
-      <p class="section-subtitle">Fillcast Labs 將安全性視為產品設計的核心原則</p>
+      <h2 class="section-title" data-i18n="security.title"></h2>
+      <p class="section-subtitle" data-i18n="security.subtitle"></p>
       <div class="security-list">
-        <div class="security-item">
-          <div class="security-check">&#10003;</div>
-          <div>
-            <h4>100% 本地儲存</h4>
-            <p>所有規則資料僅存放在你的瀏覽器中（chrome.storage.local），不會傳送至任何遠端伺服器。</p>
-          </div>
-        </div>
-        <div class="security-item">
-          <div class="security-check">&#10003;</div>
-          <div>
-            <h4>自動排除敏感欄位</h4>
-            <p>密碼欄位（type="password"）及含有信用卡、CVV 等關鍵字的欄位，一律不擷取、不儲存。</p>
-          </div>
-        </div>
-        <div class="security-item">
-          <div class="security-check">&#10003;</div>
-          <div>
-            <h4>無外部相依</h4>
-            <p>擴充功能完全使用原生 JavaScript 開發，不載入任何第三方程式庫或分析工具，杜絕供應鏈風險。</p>
-          </div>
-        </div>
-        <div class="security-item">
-          <div class="security-check">&#10003;</div>
-          <div>
-            <h4>僅限使用者觸發</h4>
-            <p>表單掃描僅在你主動點擊「擷取」按鈕時執行（自動套用除外），不會在背景無聲地收集任何資料。</p>
-          </div>
-        </div>
-        <div class="security-item">
-          <div class="security-check">&#10003;</div>
-          <div>
-            <h4>開放原始碼</h4>
-            <p>完整原始碼公開透明，歡迎檢視與審計。</p>
-          </div>
-        </div>
+        <div class="security-item"><div class="security-check">&#10003;</div><div><h4 data-i18n="security.local.title"></h4><p data-i18n="security.local.desc"></p></div></div>
+        <div class="security-item"><div class="security-check">&#10003;</div><div><h4 data-i18n="security.sensitive.title"></h4><p data-i18n="security.sensitive.desc"></p></div></div>
+        <div class="security-item"><div class="security-check">&#10003;</div><div><h4 data-i18n="security.noDeps.title"></h4><p data-i18n="security.noDeps.desc"></p></div></div>
+        <div class="security-item"><div class="security-check">&#10003;</div><div><h4 data-i18n="security.userOnly.title"></h4><p data-i18n="security.userOnly.desc"></p></div></div>
+        <div class="security-item"><div class="security-check">&#10003;</div><div><h4 data-i18n="security.openSource.title"></h4><p data-i18n="security.openSource.desc"></p></div></div>
       </div>
     </div>
   </section>
@@ -734,24 +775,24 @@
   <section id="install">
     <div class="section-inner">
       <div class="section-eyebrow">Install</div>
-      <h2 class="section-title">安裝方式</h2>
-      <p class="section-subtitle">選擇適合你的安裝方式</p>
+      <h2 class="section-title" data-i18n="install.title"></h2>
+      <p class="section-subtitle" data-i18n="install.subtitle"></p>
       <div class="install-methods">
         <div class="install-card">
-          <h3>&#127981; Chrome Web Store</h3>
+          <h3 data-i18n="install.store.title"></h3>
           <ol>
-            <li>點擊上方「安裝 Chrome 擴充功能」按鈕</li>
-            <li>在 Chrome Web Store 頁面點擊「新增至 Chrome」</li>
-            <li>確認權限後即可開始使用</li>
+            <li data-i18n="install.store.s1"></li>
+            <li data-i18n="install.store.s2"></li>
+            <li data-i18n="install.store.s3"></li>
           </ol>
         </div>
         <div class="install-card">
-          <h3>&#128187; 開發者模式安裝</h3>
+          <h3 data-i18n="install.dev.title"></h3>
           <ol>
-            <li>下載並解壓縮原始碼</li>
-            <li>開啟 Chrome，前往 <code>chrome://extensions/</code></li>
-            <li>開啟右上角「開發人員模式」</li>
-            <li>點擊「載入未封裝項目」，選擇 <code>quickfill/</code> 資料夾</li>
+            <li data-i18n="install.dev.s1"></li>
+            <li data-i18n-html="install.dev.s2"></li>
+            <li data-i18n="install.dev.s3"></li>
+            <li data-i18n-html="install.dev.s4"></li>
           </ol>
         </div>
       </div>
@@ -765,7 +806,7 @@
         <div class="company-logo">F</div>
         <h3>Fillcast Labs</h3>
         <div class="tagline">Making form filling effortless.</div>
-        <p>Fillcast Labs 致力於打造高效率的表單自動化工具，讓使用者從繁瑣的重複輸入中解放。QuickFill 是我們的第一款產品，未來將持續推出更多提升網頁操作效率的工具。</p>
+        <p data-i18n="about.desc"></p>
       </div>
     </div>
   </section>
@@ -774,55 +815,9 @@
   <section id="privacy">
     <div class="section-inner">
       <div class="section-eyebrow">Privacy Policy</div>
-      <h2 class="section-title">隱私權政策</h2>
-      <p class="section-subtitle">最後更新日期：2026 年 4 月 1 日</p>
-      <div class="privacy-content">
-        <h3>營運主體</h3>
-        <p>本隱私權政策適用於由 <strong>Fillcast Labs</strong> 開發與營運的 Chrome 擴充功能「QuickFill」。</p>
-
-        <h3>資料收集</h3>
-        <p>QuickFill <strong>不收集、不傳輸、不分享</strong>任何使用者的個人資料。擴充功能運作完全在使用者的瀏覽器本地端進行。</p>
-
-        <h3>資料儲存</h3>
-        <p>使用者透過 QuickFill 擷取的表單資料，僅儲存於以下位置：</p>
-        <ul>
-          <li><strong>chrome.storage.local</strong> — 瀏覽器本地端儲存，僅限於使用者自身裝置</li>
-          <li><strong>chrome.storage.sync</strong>（選擇性啟用）— 透過使用者自身的 Google 帳號同步至其他裝置，由 Chrome 瀏覽器原生加密傳輸</li>
-        </ul>
-        <p>除上述兩者外，Fillcast Labs 與 QuickFill 不會將資料傳送至任何外部伺服器、第三方服務或分析平台。</p>
-
-        <h3>敏感資料處理</h3>
-        <p>QuickFill 在擷取表單時，會自動排除以下類型的欄位：</p>
-        <ul>
-          <li>密碼欄位（<code>type="password"</code>）</li>
-          <li>含有信用卡號、CVV、安全碼等敏感關鍵字的欄位</li>
-        </ul>
-        <p>上述欄位的值<strong>不會被讀取、不會被儲存</strong>。</p>
-
-        <h3>權限說明</h3>
-        <p>QuickFill 所需的 Chrome 擴充功能權限及其用途：</p>
-        <ul>
-          <li><strong>storage</strong> — 用於將規則資料儲存於瀏覽器本地端</li>
-          <li><strong>activeTab</strong> — 用於存取當前分頁的頁面內容以進行表單擷取與填寫</li>
-          <li><strong>scripting</strong> — 用於在頁面中執行表單掃描與填寫腳本</li>
-          <li><strong>webNavigation</strong> — 用於偵測頁面框架結構，以支援含有 iframe 的表單頁面</li>
-        </ul>
-
-        <h3>第三方服務</h3>
-        <p>QuickFill 不使用任何第三方分析工具（如 Google Analytics）、廣告服務或資料追蹤器。擴充功能不包含任何會向外部發送請求的程式碼。</p>
-
-        <h3>資料刪除</h3>
-        <p>使用者可隨時透過擴充功能的管理頁面刪除任何已儲存的規則。移除（解除安裝）擴充功能後，所有儲存於 chrome.storage.local 的資料將被瀏覽器自動清除。</p>
-
-        <h3>兒童隱私</h3>
-        <p>QuickFill 不針對兒童設計，也不會刻意收集任何兒童的個人資訊。</p>
-
-        <h3>政策變更</h3>
-        <p>若本隱私權政策有所變更，Fillcast Labs 將在此頁面更新內容與日期。重大變更將透過擴充功能內的通知告知使用者。</p>
-
-        <h3>聯絡方式</h3>
-        <p>如有任何關於隱私權政策的疑問，請透過電子郵件 <a href="mailto:apeter10@gmail.com" style="color:var(--brand);">apeter10@gmail.com</a> 或 GitHub Issues 聯繫 Fillcast Labs 開發團隊。</p>
-      </div>
+      <h2 class="section-title" data-i18n="privacy.title"></h2>
+      <p class="section-subtitle" data-i18n="privacy.updated"></p>
+      <div class="privacy-content" data-i18n-html="privacy.content"></div>
     </div>
   </section>
 
@@ -834,16 +829,280 @@
         <span class="footer-brand-name">Fillcast Labs</span>
       </div>
       <div class="footer-links">
-        <a href="#features">功能</a>
-        <a href="#security">安全性</a>
-        <a href="#privacy">隱私政策</a>
-        <a href="#about-company">關於我們</a>
+        <a href="#features" data-i18n="nav.features"></a>
+        <a href="#security" data-i18n="nav.security"></a>
+        <a href="#privacy" data-i18n="nav.privacy"></a>
+        <a href="#about-company" data-i18n="nav.about"></a>
       </div>
     </div>
     <div class="footer-copy">
       <p>&copy; 2026 Fillcast Labs. All rights reserved. QuickFill is a product of Fillcast Labs.</p>
     </div>
   </footer>
+
+<script>
+// ===== i18n Translations =====
+const T = {
+zh: {
+  nav: { features: '功能', howItWorks: '使用方式', security: '安全性', privacy: '隱私政策', about: '關於我們' },
+  hero: {
+    badge: 'Fillcast Labs 出品',
+    title: '預約掛號、訂位<br><span class="highlight">不再重複填寫</span>',
+    subtitle: 'QuickFill 讓你一鍵擷取網頁表單內容，下次造訪相同頁面時自動填入，省去每次重複輸入相同資料的麻煩。',
+    cta: '安裝 Chrome 擴充功能',
+    ctaSecondary: '了解運作方式',
+    screenshot: '擴充功能操作截圖展示區<br><small>安裝後在此放入實際操作截圖</small>'
+  },
+  features: {
+    title: '核心功能', subtitle: '簡單三步驟，從此告別重複填寫',
+    capture: { title: '一鍵擷取表單', desc: '填好表單後，點擊 QuickFill 按鈕即可擷取所有欄位值。系統自動辨識每個欄位的定位器，確保精準對應。支援 input、select、textarea、radio、checkbox 等各種表單元素。' },
+    autofill: { title: '自動填寫', desc: '下次造訪相同頁面時，QuickFill 自動偵測匹配的規則並填入表單。支援 React、Vue 等前端框架的受控元件，確保填寫後表單狀態正確更新。' },
+    manage: { title: '規則管理', desc: '在管理頁面查看所有規則，按網站分組顯示。支援編輯欄位值、重新命名規則、刪除單條或批次刪除。為不同家庭成員各存一組資料也沒問題。' },
+    url: { title: '智慧 URL 比對', desc: '規則依據網站的 Domain + Path 綁定，忽略 Query 參數變化。掛號頁面不管日期怎麼變，規則都能正確匹配到相同的表單。' },
+    sync: { title: '跨裝置同步', desc: '將重要規則標記後，可選擇性同步至 Chrome 帳號。在家裡電腦建立的規則，到公司的電腦也能使用。完全透過 Chrome 原生同步機制，無需額外帳號。' },
+    security: { title: '安全至上', desc: '絕不擷取密碼欄位與信用卡資訊。所有資料僅儲存在瀏覽器本地，不傳送至任何外部伺服器。你的個人資料，只有你自己能看到。' }
+  },
+  steps: {
+    title: '三步驟開始使用', subtitle: '不需要複雜的設定，填好表單就能開始',
+    s1: { title: '手動填寫表單', desc: '在目標網頁（如醫院掛號、餐廳訂位）正常填寫你的個人資料。' },
+    s2: { title: '點擊擷取', desc: '點擊工具列的 QuickFill 圖示，按下「擷取目前表單」，確認內容後儲存。' },
+    s3: { title: '自動填寫', desc: '下次造訪相同頁面，表單自動填好！也可以手動選擇要套用的規則。' }
+  },
+  useCases: {
+    title: '適用場景', subtitle: '任何需要重複填寫相同資料的網頁表單',
+    hospital: { title: '醫院掛號', desc: '身分證、姓名、電話不用再重填' },
+    restaurant: { title: '餐廳訂位', desc: '每次訂位都輸入一樣的聯絡資料' },
+    event: { title: '活動報名', desc: '線上活動報名，快速填完送出' },
+    booking: { title: '預約服務', desc: '各類線上預約表單一鍵填寫' }
+  },
+  security: {
+    title: '你的資料安全是第一優先', subtitle: 'Fillcast Labs 將安全性視為產品設計的核心原則',
+    local: { title: '100% 本地儲存', desc: '所有規則資料僅存放在你的瀏覽器中（chrome.storage.local），不會傳送至任何遠端伺服器。' },
+    sensitive: { title: '自動排除敏感欄位', desc: '密碼欄位（type="password"）及含有信用卡、CVV 等關鍵字的欄位，一律不擷取、不儲存。' },
+    noDeps: { title: '無外部相依', desc: '擴充功能完全使用原生 JavaScript 開發，不載入任何第三方程式庫或分析工具，杜絕供應鏈風險。' },
+    userOnly: { title: '僅限使用者觸發', desc: '表單掃描僅在你主動點擊「擷取」按鈕時執行（自動套用除外），不會在背景無聲地收集任何資料。' },
+    openSource: { title: '開放原始碼', desc: '完整原始碼公開透明，歡迎檢視與審計。' }
+  },
+  install: {
+    title: '安裝方式', subtitle: '選擇適合你的安裝方式',
+    store: { title: '&#127981; Chrome Web Store', s1: '點擊上方「安裝 Chrome 擴充功能」按鈕', s2: '在 Chrome Web Store 頁面點擊「新增至 Chrome」', s3: '確認權限後即可開始使用' },
+    dev: { title: '&#128187; 開發者模式安裝', s1: '下載並解壓縮原始碼', s2: '開啟 Chrome，前往 <code>chrome://extensions/</code>', s3: '開啟右上角「開發人員模式」', s4: '點擊「載入未封裝項目」，選擇 <code>quickfill/</code> 資料夾' }
+  },
+  about: { desc: 'Fillcast Labs 致力於打造高效率的表單自動化工具，讓使用者從繁瑣的重複輸入中解放。QuickFill 是我們的第一款產品，未來將持續推出更多提升網頁操作效率的工具。' },
+  privacy: {
+    title: '隱私權政策', updated: '最後更新日期：2026 年 4 月 1 日',
+    content: `<h3>營運主體</h3><p>本隱私權政策適用於由 <strong>Fillcast Labs</strong> 開發與營運的 Chrome 擴充功能「QuickFill」。</p>
+<h3>資料收集</h3><p>QuickFill <strong>不收集、不傳輸、不分享</strong>任何使用者的個人資料。擴充功能運作完全在使用者的瀏覽器本地端進行。</p>
+<h3>資料儲存</h3><p>使用者透過 QuickFill 擷取的表單資料，僅儲存於以下位置：</p><ul><li><strong>chrome.storage.local</strong> — 瀏覽器本地端儲存，僅限於使用者自身裝置</li><li><strong>chrome.storage.sync</strong>（選擇性啟用）— 透過使用者自身的 Google 帳號同步至其他裝置，由 Chrome 瀏覽器原生加密傳輸</li></ul><p>除上述兩者外，Fillcast Labs 與 QuickFill 不會將資料傳送至任何外部伺服器、第三方服務或分析平台。</p>
+<h3>敏感資料處理</h3><p>QuickFill 在擷取表單時，會自動排除以下類型的欄位：</p><ul><li>密碼欄位（<code>type="password"</code>）</li><li>含有信用卡號、CVV、安全碼等敏感關鍵字的欄位</li></ul><p>上述欄位的值<strong>不會被讀取、不會被儲存</strong>。</p>
+<h3>權限說明</h3><p>QuickFill 所需的 Chrome 擴充功能權限及其用途：</p><ul><li><strong>storage</strong> — 用於將規則資料儲存於瀏覽器本地端</li><li><strong>activeTab</strong> — 用於存取當前分頁的頁面內容以進行表單擷取與填寫</li><li><strong>scripting</strong> — 用於在頁面中執行表單掃描與填寫腳本</li><li><strong>webNavigation</strong> — 用於偵測頁面框架結構，以支援含有 iframe 的表單頁面</li></ul>
+<h3>第三方服務</h3><p>QuickFill 不使用任何第三方分析工具（如 Google Analytics）、廣告服務或資料追蹤器。擴充功能不包含任何會向外部發送請求的程式碼。</p>
+<h3>資料刪除</h3><p>使用者可隨時透過擴充功能的管理頁面刪除任何已儲存的規則。移除（解除安裝）擴充功能後，所有儲存於 chrome.storage.local 的資料將被瀏覽器自動清除。</p>
+<h3>兒童隱私</h3><p>QuickFill 不針對兒童設計，也不會刻意收集任何兒童的個人資訊。</p>
+<h3>政策變更</h3><p>若本隱私權政策有所變更，Fillcast Labs 將在此頁面更新內容與日期。重大變更將透過擴充功能內的通知告知使用者。</p>
+<h3>聯絡方式</h3><p>如有任何關於隱私權政策的疑問，請透過電子郵件 <a href="mailto:fillcastlabs@outlook.com">fillcastlabs@outlook.com</a> 或 GitHub Issues 聯繫 Fillcast Labs 開發團隊。</p>`
+  }
+},
+
+en: {
+  nav: { features: 'Features', howItWorks: 'How It Works', security: 'Security', privacy: 'Privacy', about: 'About' },
+  hero: {
+    badge: 'By Fillcast Labs',
+    title: 'Appointments & Reservations<br><span class="highlight">Never Re-type Again</span>',
+    subtitle: 'QuickFill captures your web form data in one click and auto-fills it on your next visit. No more repetitive typing.',
+    cta: 'Install Chrome Extension',
+    ctaSecondary: 'See How It Works',
+    screenshot: 'Extension screenshots area<br><small>Replace with actual screenshots after install</small>'
+  },
+  features: {
+    title: 'Core Features', subtitle: 'Three simple steps to never repeat yourself again',
+    capture: { title: 'One-Click Capture', desc: 'After filling out a form, click the QuickFill button to capture all field values. The system auto-identifies each field\'s locator for precise matching. Supports input, select, textarea, radio, checkbox and more.' },
+    autofill: { title: 'Auto Fill', desc: 'When you revisit the same page, QuickFill auto-detects matching rules and fills in the form. Compatible with React, Vue and other framework-controlled components.' },
+    manage: { title: 'Rule Management', desc: 'View all rules grouped by website on the management page. Edit field values, rename rules, delete individually or in batch. Save different profiles for family members.' },
+    url: { title: 'Smart URL Matching', desc: 'Rules are bound by Domain + Path, ignoring query parameters. No matter how the date param changes on a booking page, the rule still matches correctly.' },
+    sync: { title: 'Cross-Device Sync', desc: 'Mark important rules and optionally sync them to your Chrome account. Rules created on your home computer are available at work too. Uses Chrome\'s native sync — no extra account needed.' },
+    security: { title: 'Security First', desc: 'Never captures password fields or credit card information. All data is stored locally in the browser only. No data is ever sent to any external server.' }
+  },
+  steps: {
+    title: 'Get Started in 3 Steps', subtitle: 'No complex setup — just fill a form and go',
+    s1: { title: 'Fill Out the Form', desc: 'Fill in your personal info on the target page (e.g., hospital appointments, restaurant reservations) as usual.' },
+    s2: { title: 'Click Capture', desc: 'Click the QuickFill icon in the toolbar, hit "Capture Current Form", review and save.' },
+    s3: { title: 'Auto Fill', desc: 'Next time you visit the same page, the form is filled automatically! You can also manually choose which rule to apply.' }
+  },
+  useCases: {
+    title: 'Use Cases', subtitle: 'Any web form that requires repetitive data entry',
+    hospital: { title: 'Medical Appointments', desc: 'No more re-entering ID, name and phone' },
+    restaurant: { title: 'Restaurant Reservations', desc: 'Same contact info every time you book' },
+    event: { title: 'Event Registration', desc: 'Sign up for events in seconds' },
+    booking: { title: 'Service Bookings', desc: 'One-click fill for any online booking form' }
+  },
+  security: {
+    title: 'Your Data Security Comes First', subtitle: 'Fillcast Labs treats security as a core design principle',
+    local: { title: '100% Local Storage', desc: 'All rule data is stored in your browser only (chrome.storage.local). Nothing is ever sent to any remote server.' },
+    sensitive: { title: 'Sensitive Fields Excluded', desc: 'Password fields (type="password") and fields containing credit card, CVV keywords are never captured or stored.' },
+    noDeps: { title: 'Zero External Dependencies', desc: 'Built entirely with native JavaScript. No third-party libraries or analytics tools. Zero supply-chain risk.' },
+    userOnly: { title: 'User-Triggered Only', desc: 'Form scanning only runs when you click the "Capture" button (except auto-apply). No silent background data collection.' },
+    openSource: { title: 'Open Source', desc: 'Full source code is open and transparent. Feel free to review and audit.' }
+  },
+  install: {
+    title: 'Installation', subtitle: 'Choose the method that works for you',
+    store: { title: '&#127981; Chrome Web Store', s1: 'Click the "Install Chrome Extension" button above', s2: 'Click "Add to Chrome" on the Web Store page', s3: 'Confirm permissions and start using' },
+    dev: { title: '&#128187; Developer Mode', s1: 'Download and unzip the source code', s2: 'Open Chrome, go to <code>chrome://extensions/</code>', s3: 'Enable "Developer mode" in the top right', s4: 'Click "Load unpacked" and select the <code>quickfill/</code> folder' }
+  },
+  about: { desc: 'Fillcast Labs is dedicated to building efficient form automation tools that free users from tedious repetitive input. QuickFill is our first product, with more web productivity tools coming soon.' },
+  privacy: {
+    title: 'Privacy Policy', updated: 'Last updated: April 1, 2026',
+    content: `<h3>Entity</h3><p>This privacy policy applies to the Chrome extension "QuickFill" developed and operated by <strong>Fillcast Labs</strong>.</p>
+<h3>Data Collection</h3><p>QuickFill <strong>does not collect, transmit, or share</strong> any personal data. The extension operates entirely within the user's local browser.</p>
+<h3>Data Storage</h3><p>Form data captured through QuickFill is stored only in:</p><ul><li><strong>chrome.storage.local</strong> — local browser storage, limited to the user's own device</li><li><strong>chrome.storage.sync</strong> (optional) — synced to other devices via the user's own Google account, encrypted by Chrome's native sync</li></ul><p>Beyond the above, Fillcast Labs and QuickFill do not transmit data to any external server, third-party service, or analytics platform.</p>
+<h3>Sensitive Data</h3><p>When capturing forms, QuickFill automatically excludes:</p><ul><li>Password fields (<code>type="password"</code>)</li><li>Fields containing credit card number, CVV, or security code keywords</li></ul><p>These field values are <strong>never read or stored</strong>.</p>
+<h3>Permissions</h3><p>Chrome extension permissions required by QuickFill:</p><ul><li><strong>storage</strong> — to store rule data in the browser locally</li><li><strong>activeTab</strong> — to access the current tab's content for form capture and fill</li><li><strong>scripting</strong> — to execute form scanning and filling scripts on pages</li><li><strong>webNavigation</strong> — to detect page frame structure for iframe form support</li></ul>
+<h3>Third-Party Services</h3><p>QuickFill does not use any third-party analytics tools (such as Google Analytics), advertising services, or data trackers. The extension contains no code that sends requests to external services.</p>
+<h3>Data Deletion</h3><p>Users can delete any saved rule at any time through the extension's management page. Uninstalling the extension will cause Chrome to automatically clear all data stored in chrome.storage.local.</p>
+<h3>Children's Privacy</h3><p>QuickFill is not designed for children and does not intentionally collect any personal information from children.</p>
+<h3>Policy Changes</h3><p>If this privacy policy changes, Fillcast Labs will update the content and date on this page. Significant changes will be communicated through in-extension notifications.</p>
+<h3>Contact</h3><p>For any questions regarding this privacy policy, please contact the Fillcast Labs team via email at <a href="mailto:fillcastlabs@outlook.com">fillcastlabs@outlook.com</a> or through GitHub Issues.</p>`
+  }
+},
+
+ja: {
+  nav: { features: '機能', howItWorks: '使い方', security: 'セキュリティ', privacy: 'プライバシー', about: '会社概要' },
+  hero: {
+    badge: 'Fillcast Labs 製',
+    title: '予約・申し込み<br><span class="highlight">もう何度も入力しない</span>',
+    subtitle: 'QuickFill はワンクリックでウェブフォームの内容を取得し、次回同じページにアクセスした際に自動入力します。繰り返しの入力作業から解放されます。',
+    cta: 'Chrome 拡張機能をインストール',
+    ctaSecondary: '使い方を見る',
+    screenshot: '拡張機能のスクリーンショット表示エリア<br><small>インストール後に実際のスクリーンショットを配置</small>'
+  },
+  features: {
+    title: 'コア機能', subtitle: '簡単3ステップで、繰り返し入力にさよなら',
+    capture: { title: 'ワンクリック取得', desc: 'フォーム入力後、QuickFill ボタンをクリックするだけで全フィールドの値を取得。システムが各フィールドのロケーターを自動識別し、正確なマッチングを実現。input、select、textarea、radio、checkbox など様々なフォーム要素に対応。' },
+    autofill: { title: '自動入力', desc: '同じページに再アクセスすると、QuickFill がマッチするルールを自動検出しフォームに入力。React、Vue などのフレームワークの制御コンポーネントにも対応し、入力後のフォーム状態を正しく更新します。' },
+    manage: { title: 'ルール管理', desc: '管理ページでウェブサイトごとにグループ化された全ルールを表示。フィールド値の編集、ルール名の変更、単一・一括削除に対応。家族それぞれのデータを保存することも可能です。' },
+    url: { title: 'スマート URL マッチング', desc: 'ルールはドメイン + パスで紐付けされ、クエリパラメータの変化は無視されます。予約ページの日付パラメータが変わっても、ルールは正しくマッチします。' },
+    sync: { title: 'クロスデバイス同期', desc: '重要なルールにマークを付けると、Chrome アカウントに同期可能。自宅で作成したルールを職場でも利用できます。Chrome のネイティブ同期機能を使用するため、追加アカウントは不要です。' },
+    security: { title: 'セキュリティ最優先', desc: 'パスワードフィールドやクレジットカード情報は一切取得しません。全データはブラウザのローカルにのみ保存され、外部サーバーには一切送信されません。' }
+  },
+  steps: {
+    title: '3ステップで開始', subtitle: '複雑な設定は不要、フォームを入力するだけ',
+    s1: { title: 'フォームを入力', desc: '対象のウェブページ（病院予約、レストラン予約など）で通常通り個人情報を入力します。' },
+    s2: { title: '取得をクリック', desc: 'ツールバーの QuickFill アイコンをクリックし、「現在のフォームを取得」を押して、内容を確認後保存します。' },
+    s3: { title: '自動入力', desc: '次回同じページにアクセスすると、フォームが自動的に入力されます！手動でルールを選択して適用することもできます。' }
+  },
+  useCases: {
+    title: '活用シーン', subtitle: '同じ情報を繰り返し入力するあらゆるウェブフォームに',
+    hospital: { title: '病院予約', desc: 'ID・氏名・電話番号の再入力が不要' },
+    restaurant: { title: 'レストラン予約', desc: '毎回同じ連絡先を入力する手間を省略' },
+    event: { title: 'イベント登録', desc: 'オンラインイベントの申し込みを素早く完了' },
+    booking: { title: '各種予約', desc: 'あらゆるオンライン予約フォームをワンクリックで入力' }
+  },
+  security: {
+    title: 'データセキュリティを最優先に', subtitle: 'Fillcast Labs はセキュリティを製品設計の核心原則としています',
+    local: { title: '100% ローカル保存', desc: '全ルールデータはブラウザ内（chrome.storage.local）にのみ保存され、リモートサーバーには一切送信されません。' },
+    sensitive: { title: '機密フィールド自動除外', desc: 'パスワードフィールド（type="password"）及びクレジットカード・CVV 等のキーワードを含むフィールドは一切取得・保存しません。' },
+    noDeps: { title: '外部依存ゼロ', desc: 'ネイティブ JavaScript のみで開発。サードパーティライブラリや分析ツールは一切使用せず、サプライチェーンリスクを排除。' },
+    userOnly: { title: 'ユーザー操作時のみ', desc: 'フォームスキャンは「取得」ボタンをクリックした時のみ実行（自動適用を除く）。バックグラウンドでの無断データ収集は行いません。' },
+    openSource: { title: 'オープンソース', desc: '完全なソースコードを公開しています。自由にレビュー・監査できます。' }
+  },
+  install: {
+    title: 'インストール方法', subtitle: 'お好みの方法でインストールしてください',
+    store: { title: '&#127981; Chrome ウェブストア', s1: '上部の「Chrome 拡張機能をインストール」ボタンをクリック', s2: 'Chrome ウェブストアのページで「Chrome に追加」をクリック', s3: '権限を確認して使用開始' },
+    dev: { title: '&#128187; デベロッパーモード', s1: 'ソースコードをダウンロードして解凍', s2: 'Chrome で <code>chrome://extensions/</code> を開く', s3: '右上の「デベロッパーモード」を有効にする', s4: '「パッケージ化されていない拡張機能を読み込む」をクリックし、<code>quickfill/</code> フォルダを選択' }
+  },
+  about: { desc: 'Fillcast Labs は、ユーザーを煩雑な繰り返し入力から解放する、効率的なフォーム自動化ツールの開発に取り組んでいます。QuickFill は当社の最初の製品であり、今後もウェブ操作の効率を高めるツールを続々とリリースしていきます。' },
+  privacy: {
+    title: 'プライバシーポリシー', updated: '最終更新日：2026年4月1日',
+    content: `<h3>運営主体</h3><p>本プライバシーポリシーは、<strong>Fillcast Labs</strong> が開発・運営する Chrome 拡張機能「QuickFill」に適用されます。</p>
+<h3>データ収集</h3><p>QuickFill はユーザーの個人データを<strong>一切収集、送信、共有しません</strong>。拡張機能の動作は完全にユーザーのローカルブラウザ内で行われます。</p>
+<h3>データ保存</h3><p>QuickFill を通じて取得されたフォームデータは、以下の場所にのみ保存されます：</p><ul><li><strong>chrome.storage.local</strong> — ブラウザのローカルストレージ、ユーザー自身のデバイスのみ</li><li><strong>chrome.storage.sync</strong>（オプション）— ユーザー自身の Google アカウントを通じて他のデバイスに同期、Chrome のネイティブ暗号化で転送</li></ul><p>上記以外に、Fillcast Labs および QuickFill は、外部サーバー、サードパーティサービス、分析プラットフォームにデータを送信することはありません。</p>
+<h3>機密データの取り扱い</h3><p>QuickFill はフォーム取得時に、以下のタイプのフィールドを自動的に除外します：</p><ul><li>パスワードフィールド（<code>type="password"</code>）</li><li>クレジットカード番号、CVV、セキュリティコード等のキーワードを含むフィールド</li></ul><p>これらのフィールドの値は<strong>読み取られることも保存されることもありません</strong>。</p>
+<h3>権限の説明</h3><p>QuickFill が必要とする Chrome 拡張機能の権限とその用途：</p><ul><li><strong>storage</strong> — ルールデータをブラウザのローカルに保存するため</li><li><strong>activeTab</strong> — フォームの取得と入力のために現在のタブのコンテンツにアクセスするため</li><li><strong>scripting</strong> — ページ上でフォームスキャンと入力スクリプトを実行するため</li><li><strong>webNavigation</strong> — iframe 内のフォームをサポートするためにページのフレーム構造を検出するため</li></ul>
+<h3>サードパーティサービス</h3><p>QuickFill は Google Analytics などのサードパーティ分析ツール、広告サービス、データトラッカーを一切使用しません。拡張機能には外部サービスにリクエストを送信するコードは含まれていません。</p>
+<h3>データの削除</h3><p>ユーザーは拡張機能の管理ページから、保存されたルールをいつでも削除できます。拡張機能をアンインストールすると、chrome.storage.local に保存された全データが Chrome により自動的に消去されます。</p>
+<h3>お子様のプライバシー</h3><p>QuickFill はお子様向けに設計されておらず、お子様の個人情報を意図的に収集することはありません。</p>
+<h3>ポリシーの変更</h3><p>本プライバシーポリシーに変更がある場合、Fillcast Labs はこのページの内容と日付を更新します。重要な変更は拡張機能内の通知を通じてお知らせします。</p>
+<h3>お問い合わせ</h3><p>プライバシーポリシーに関するご質問は、メール <a href="mailto:fillcastlabs@outlook.com">fillcastlabs@outlook.com</a> または GitHub Issues にて Fillcast Labs 開発チームまでご連絡ください。</p>`
+  }
+}
+};
+
+// ===== i18n Engine =====
+function getNestedValue(obj, path) {
+  return path.split('.').reduce((o, k) => (o && o[k] !== undefined) ? o[k] : null, obj);
+}
+
+function applyLanguage(lang) {
+  const t = T[lang];
+  if (!t) return;
+
+  document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : lang;
+
+  // Update title & meta
+  const titles = { zh: 'QuickFill — 一鍵擷取表單、自動填寫 | Fillcast Labs', en: 'QuickFill — One-Click Form Capture & Auto-Fill | Fillcast Labs', ja: 'QuickFill — ワンクリックフォーム取得＆自動入力 | Fillcast Labs' };
+  document.title = titles[lang];
+
+  // Text content
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const val = getNestedValue(t, el.dataset.i18n);
+    if (val) el.textContent = val;
+  });
+
+  // HTML content
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const val = getNestedValue(t, el.dataset.i18nHtml);
+    if (val) el.innerHTML = val;
+  });
+
+  // Language switcher
+  document.querySelectorAll('.lang-option').forEach(opt => {
+    opt.classList.toggle('active', opt.dataset.lang === lang);
+  });
+  const labels = { zh: '繁體中文', en: 'English', ja: '日本語' };
+  document.getElementById('lang-label').textContent = labels[lang];
+
+  localStorage.setItem('qf-lang', lang);
+}
+
+function detectLanguage() {
+  const saved = localStorage.getItem('qf-lang');
+  if (saved && T[saved]) return saved;
+
+  const hash = location.hash.replace('#', '');
+  if (hash && T[hash]) return hash;
+
+  const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+  if (browserLang.startsWith('ja')) return 'ja';
+  if (browserLang.startsWith('zh')) return 'zh';
+  return 'en';
+}
+
+// ===== Init =====
+document.addEventListener('DOMContentLoaded', () => {
+  const lang = detectLanguage();
+  applyLanguage(lang);
+
+  // Language dropdown toggle
+  const langBtn = document.getElementById('lang-btn');
+  const langDropdown = document.getElementById('lang-dropdown');
+
+  langBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    langDropdown.classList.toggle('open');
+  });
+
+  document.addEventListener('click', () => {
+    langDropdown.classList.remove('open');
+  });
+
+  document.querySelectorAll('.lang-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      applyLanguage(opt.dataset.lang);
+      langDropdown.classList.remove('open');
+    });
+  });
+});
+</script>
 
 </body>
 </html>
